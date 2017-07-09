@@ -33,6 +33,7 @@ let play = (bot, conn, msg) => {
         // Queue ended
         bot.createMessage(msg.channel.id, 'Queue ended!\nUse **++play** to continue listening.')
         bot.leaveVoiceChannel(msg.member.voiceState.channelID)
+        delete queues[msg.member.guild.id]
         delete conns[msg.member.guild.id]
       }
     )
@@ -92,6 +93,9 @@ module.exports = {
           bot.createMessage(msg.channel.id, 'Error joining voice channel: ' + err.message)
           console.log(err)
         }).then((conn) => {
+          console.log('creating new connection')
+          if(conn.playing)
+            conn.stopPlaying()
           conn.on('error', (err) => { console.error(err) })
           conns[msg.member.guild.id] = conn
           play(bot, conn, msg)
