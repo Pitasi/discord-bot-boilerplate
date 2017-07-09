@@ -1,10 +1,9 @@
 const config = require('./config.js')
 const path = require('path').join(__dirname, 'modules')
 
-/* Import every .js file in modules/ */
+/* Import every file or folders in modules/ */
 let commands = {}
 require("fs").readdirSync(path).forEach((file) => {
-  if (!file.endsWith('.js')) return
   Object.assign(commands, require('./modules/' + file))
 })
 
