@@ -1,16 +1,12 @@
 const config = require('./config.js')
+const path = require('path').join(__dirname, 'modules')
 
-/* START EDITING HERE */
-let commands = {
-  ping: {
-    desc: 'Simple test command',
-    exec: (bot, msg) => {
-      bot.createMessage(msg.channel.id, 'PONG!')
-    }
-  }
-}
-
-/* END EDITING HERE */
+/* Import every .js file in modules/                 */
+let commands = {}
+require("fs").readdirSync(path).forEach((file) => {
+  if (!file.endsWith('.js')) return
+  Object.assign(commands, require('./modules/' + file))
+})
 
 /* Help command needs to access commands list itself */
 commands.help = {
