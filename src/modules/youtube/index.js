@@ -93,7 +93,6 @@ module.exports = {
           bot.createMessage(msg.channel.id, 'Error joining voice channel: ' + err.message)
           console.log(err)
         }).then((conn) => {
-          console.log('creating new connection')
           if(conn.playing)
             conn.stopPlaying()
           conn.on('error', (err) => { console.error(err) })
@@ -101,6 +100,8 @@ module.exports = {
           play(bot, conn, msg)
         })
       }
+
+      bot.deleteMessage(msg.channel.id, msg.id, 'Flood control')
     }
   }
 }
