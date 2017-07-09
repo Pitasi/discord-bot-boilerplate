@@ -1,0 +1,28 @@
+{
+  "name": "discord-bot-boilerplate",
+  "version": "0.1.0",
+  "description": "Super modular way to make Discord bots",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Pitasi/discord-bot-boilerplate.git"
+  },
+  "keywords": [
+    "discord",
+    "eris"
+  ],
+  "author": "Antonio Pitasi",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Pitasi/discord-bot-boilerplate/issues"
+  },
+  "homepage": "https://github.com/Pitasi/discord-bot-boilerplate#readme",
+  "dependencies": {
+    "eris": "^0.7.0",
+    "js-video-url-parser": "^0.2.3",
+    "ytdl-core": "^0.14.4"
+  }
+}

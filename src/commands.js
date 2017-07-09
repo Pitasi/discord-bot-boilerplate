@@ -1,7 +1,7 @@
 const config = require('./config.js')
 const path = require('path').join(__dirname, 'modules')
 
-/* Import every .js file in modules/                 */
+/* Import every .js file in modules/ */
 let commands = {}
 require("fs").readdirSync(path).forEach((file) => {
   if (!file.endsWith('.js')) return
@@ -21,7 +21,7 @@ commands.help = {
       bot.createMessage(msg.channel.id, txt)
     }
     else {
-      let txt = `Use **${config.prefix}help <cmd>** for command's details\n`
+      let txt = `Use **${config.prefix}help <cmd>** for command's details.\nList:\n`
       txt += Object.keys(commands).map(c=>(config.prefix+c)).join('\n')
       bot.createMessage(msg.channel.id, txt)
     }
