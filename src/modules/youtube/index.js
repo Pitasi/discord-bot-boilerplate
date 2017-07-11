@@ -43,28 +43,31 @@ let play = (bot, conn, msg) => {
   let parsed = urlParser.parse(msg.payload)
   if (parsed && parsed.provider !== 'youtube') return // parser supports other sites than YouTube but we don't care, do we?
 
-  if (parsed && !parsed.list) {
-    // Single video
-    ytdl.getInfo(parsed.id, (err, info) => {
-      if (err) {
-        bot.createMessage(msg.channel.id, `Error: ${err}`)
-        return console.error(err)
-      }
-      if (!q.isEmpty() || q.isPlaying())
-        bot.createMessage(msg.channel.id, `Queue: added **${info.title}**.\nRequested by ${msg.author.mention}.`)
-      q.add({ id: parsed.id, info: info, by: msg.author.mention })
-    })
-  }
+  bot.createMessage(msg.channel.id, 'Loading...').then((loadmsg) => {
+    if (parsed && !parsed.list) {
+      // Single video
+      ytdl.getInfo(parsed.id, (err, info) => {
+        if (err) {
+          bot.editMessage(loadmsg.channel.id, loadmsg.id, `Error: ${err}`)
+          return console.error(err)
+        }
+        if (!q.isEmpty() || q.isPlaying())
+          bot.editMessage(loadmsg.channel.id, loadmsg.id, `Queue: added **${info.title}**.\nRequested by ${msg.author.mention}.`)
+        q.add({ id: parsed.id, info: info, by: msg.author.mention })
+      })
+    }
 
-  else if (parsed && parsed.list) {
-    // Playlists
-    bot.createMessage(msg.channel.id, `Playlist are not supported yet.`)
-  }
+    else if (parsed && parsed.list) {
+      // Playlists
+      bot.createMessage(msg.channel.id, `Playlist are not supported yet.`)
+    }
 
-  else {
-    // Search
-    bot.createMessage(msg.channel.id, `Invalid url, search is not supported yet.`)
-  }
+    else {
+      // Search
+      bot.createMessage(msg.channel.id, `Invalid url, search is not supported yet.`)
+    }
+  })
+
 
 }
 
