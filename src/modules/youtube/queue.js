@@ -8,9 +8,10 @@ module.exports = class Queue {
     this.playing = false
   }
 
-  isEmpty() { return this.list.length == 0 }
+  isEmpty()   { return this.list.length == 0 }
   isPlaying() { return this.playing }
 
+  // New element in queue
   add (obj) {
     // New element
     if (this.isEmpty() && !(this.playing)) {
@@ -20,8 +21,16 @@ module.exports = class Queue {
     else this.list.push(obj)
   }
 
-  ended () {
-    // A video ended, let's begin next one
+  // A video ended, let's begin next one
+  ended (flag) {
+    // A skip request call this function, then video ends and this
+    // function gets called again - ignore the second one
+    if (this.pending) {
+      this.pending = false
+      return
+    }
+    if (flag) this.pending = true
+
     let next = this.list.shift()
     if (next) this.nextElement(next, this.ended.bind(this))
     else {
@@ -30,8 +39,10 @@ module.exports = class Queue {
     }
   }
 
-  skip () {
-    this.ended()
+  skip () { this.ended(true) }
+
+  empty () {
+    this.list = []
   }
 
 }

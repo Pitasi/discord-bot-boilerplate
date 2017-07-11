@@ -24,6 +24,8 @@
   "dependencies": {
     "eris": "^0.7.0",
     "js-video-url-parser": "^0.2.3",
-    "ytdl-core": "^0.14.4"
+    "ytdl-core": "^0.14.4",
+    "ytpl": "^0.1.6",
+    "ytsr": "^0.1.5"
   }
 }
