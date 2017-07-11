@@ -23,6 +23,7 @@ let play = (bot, conn, msg) => {
     queues[msg.member.guild.id] = new Queue(
       (el, end) => {
         // New video begins
+        if (conn.playing) conn.stopPlaying()
         let stream = ytdl.downloadFromInfo(el.info, { format: 'audioonly' })
         bot.createMessage(msg.channel.id, `Now playing **${el.info.title}**.\n${el.by}, that's for you!`)
 
@@ -101,6 +102,25 @@ module.exports = {
         })
       }
 
+      bot.deleteMessage(msg.channel.id, msg.id, 'Flood control')
+    }
+  },
+
+  stop: {
+    desc: 'TODO',
+    exec: (bot, msg) => {
+      conns[msg.member.guild.id].stopPlaying()
+      delete conns[msg.member.guild.id]
+      delete queues[msg.member.guild.id]
+      bot.createMessage(msg.channel.id, `Bot stopped by ${msg.author.mention}`)
+      bot.deleteMessage(msg.channel.id, msg.id, 'Flood control')
+    }
+  },
+
+  skip: {
+    desc: 'TODO',
+    exec: (bot, msg) => {
+      queues[msg.member.guild.id].skip()
       bot.deleteMessage(msg.channel.id, msg.id, 'Flood control')
     }
   }

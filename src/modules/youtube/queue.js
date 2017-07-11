@@ -30,4 +30,8 @@ module.exports = class Queue {
     }
   }
 
+  skip () {
+    this.ended()
+  }
+
 }
