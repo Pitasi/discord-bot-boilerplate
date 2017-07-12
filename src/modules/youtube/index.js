@@ -49,7 +49,7 @@ let play = (bot, conn, msg) => {
   let parsed = urlParser.parse(msg.payload)
   if (parsed && parsed.provider !== 'youtube') return // parser supports other sites than YouTube but we don't care, do we?
 
-  bot.createMessage(msg.channel.id, 'Loading...').then((loadmsg) => {
+  bot.createMessage(msg.channel.id, ':hourglass: Loading...').then((loadmsg) => {
     if (parsed && !parsed.list) {
       // Single video
       ytdl.getInfo(parsed.id, (err, info) => {
@@ -92,7 +92,7 @@ let play = (bot, conn, msg) => {
           if (v.type === 'video') {
             let parsed = urlParser.parse(v.link)
             if (!q.isEmpty() || q.isPlaying())
-              bot.editMessage(loadmsg.channel.id, loadmsg.id, `:information_source: Result found: **${v.title}** (http://youtu.be/${parsed.id}).\nRequested by ${msg.author.mention}.`)
+              bot.editMessage(loadmsg.channel.id, loadmsg.id, `:information_source: Added result to queue: **${v.title}** (http://youtu.be/${parsed.id}).\nRequested by ${msg.author.mention}.`)
             else
               bot.deleteMessage(loadmsg.channel.id, loadmsg.id, 'Flood control')
             q.add({ id: parsed.id, info: v, by: msg.author.mention })
