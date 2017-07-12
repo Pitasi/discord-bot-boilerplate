@@ -145,11 +145,16 @@ module.exports = {
   stop: {
     desc: 'TODO',
     exec: (bot, msg) => {
-      queues[msg.member.guild.id].empty()
-      conns[msg.member.guild.id].stopPlaying()
-      delete conns[msg.member.guild.id]
-      delete queues[msg.member.guild.id]
-      bot.createMessage(msg.channel.id, `:frowning2: Bot stopped by ${msg.author.mention}`)
+      if (!queues[msg.member.guild.id] || !conns[msg.member.guild.id]) {
+        bot.createMessage(msg.channel.id, `:x: ${msg.author.mention}, nothing is being played!`)
+      }
+      else {
+        queues[msg.member.guild.id].empty()
+        conns[msg.member.guild.id].stopPlaying()
+        delete conns[msg.member.guild.id]
+        delete queues[msg.member.guild.id]
+        bot.createMessage(msg.channel.id, `:frowning2: Bot stopped by ${msg.author.mention}`)
+      }
       bot.deleteMessage(msg.channel.id, msg.id, 'Flood control')
     }
   },
