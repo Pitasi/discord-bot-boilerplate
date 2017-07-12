@@ -81,27 +81,32 @@ let play = (bot, conn, msg) => {
     else {
       // Search
       bot.editMessage(loadmsg.channel.id, loadmsg.id, `:mag_right: Searching on YouTube...`)
-      ytsr.search(msg.payload, {limit: 1}, (err, res) => {
-        if (err) {
-          bot.editMessage(loadmsg.channel.id, loadmsg.id, `Error: ${err}`)
-          return console.error(err)
-        }
-        let found = false
-        for (let i in res.items) {
-          let v = res.items[i]
-          if (v.type === 'video') {
-            let parsed = urlParser.parse(v.link)
-            if (!q.isEmpty() || q.isPlaying())
-              bot.editMessage(loadmsg.channel.id, loadmsg.id, `:information_source: Added result to queue: **${v.title}** (http://youtu.be/${parsed.id}).\nRequested by ${msg.author.mention}.`)
-            else
-              bot.deleteMessage(loadmsg.channel.id, loadmsg.id, 'Flood control')
-            q.add({ id: parsed.id, info: v, by: msg.author.mention })
-            found = true
-            break
-          }
-        }
+      let found = false
 
-        if (!found) bot.editMessage(loadmsg.channel.id, loadmsg.id, `:x: Sorry ${msg.author.mention}, no videos were found for your query.`)
+      try {
+        ytsr.search(msg.payload, {limit: 1}, (err, res) => {
+          if (err) {
+            bot.editMessage(loadmsg.channel.id, loadmsg.id, `Error: ${err}`)
+            return console.error(err)
+          }
+          for (let i in res.items) {
+            let v = res.items[i]
+            if (v.type === 'video') {
+              let parsed = urlParser.parse(v.link)
+              if (!q.isEmpty() || q.isPlaying())
+                bot.editMessage(loadmsg.channel.id, loadmsg.id, `:information_source: Added result to queue: **${v.title}** (http://youtu.be/${parsed.id}).\nRequested by ${msg.author.mention}.`)
+              else
+                bot.deleteMessage(loadmsg.channel.id, loadmsg.id, 'Flood control')
+              q.add({ id: parsed.id, info: v, by: msg.author.mention })
+              found = true
+              break
+            }
+          }
+          if (!found) bot.editMessage(loadmsg.channel.id, loadmsg.id, `:x: Sorry ${msg.author.mention}, no videos were found for your query.`)
+        }
+        catch (err) {
+           bot.editMessage(loadmsg.channel.id, loadmsg.id, err.toString())
+        }
       })
     }
   })
