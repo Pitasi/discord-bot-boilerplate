@@ -59,6 +59,8 @@ let play = (bot, conn, msg) => {
         }
         if (!q.isEmpty() || q.isPlaying())
           bot.editMessage(loadmsg.channel.id, loadmsg.id, `:information_source: Added to queue: **${info.title}** (https://youtu.be/${info.video_id}).\nRequested by ${msg.author.mention}.`)
+        else
+          bot.deleteMessage(loadmsg.channel.id, loadmsg.id, 'Flood control')
         q.add({ id: parsed.id, info: info, by: msg.author.mention })
       })
     }
@@ -89,11 +91,11 @@ let play = (bot, conn, msg) => {
           let v = res.items[i]
           if (v.type === 'video') {
             let parsed = urlParser.parse(v.link)
-            q.add({ id: parsed.id, info: v, by: msg.author.mention })
             if (!q.isEmpty() || q.isPlaying())
               bot.editMessage(loadmsg.channel.id, loadmsg.id, `:information_source: Result found: **${v.title}** (http://youtu.be/${parsed.id}).\nRequested by ${msg.author.mention}.`)
             else
               bot.deleteMessage(loadmsg.channel.id, loadmsg.id, 'Flood control')
+            q.add({ id: parsed.id, info: v, by: msg.author.mention })
             found = true
             break
           }
