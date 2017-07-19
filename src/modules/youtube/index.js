@@ -83,7 +83,6 @@ let play = (bot, conn, msg) => {
       bot.editMessage(loadmsg.channel.id, loadmsg.id, `:mag_right: Searching on YouTube...`)
       let found = false
 
-      try {
         ytsr.search(msg.payload, {limit: 1}, (err, res) => {
           if (err) {
             bot.editMessage(loadmsg.channel.id, loadmsg.id, `Error: ${err}`)
@@ -103,10 +102,6 @@ let play = (bot, conn, msg) => {
             }
           }
           if (!found) bot.editMessage(loadmsg.channel.id, loadmsg.id, `:x: Sorry ${msg.author.mention}, no videos were found for your query.`)
-        }
-        catch (err) {
-           bot.editMessage(loadmsg.channel.id, loadmsg.id, err.toString())
-        }
       })
     }
   })
